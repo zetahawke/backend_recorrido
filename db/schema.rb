@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_16_163428) do
+ActiveRecord::Schema.define(version: 2020_03_16_170537) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,9 +21,16 @@ ActiveRecord::Schema.define(version: 2020_03_16_163428) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "road_routes", force: :cascade do |t|
+  create_table "road_route_points", force: :cascade do |t|
     t.string "latitude"
     t.string "longitude"
+    t.bigint "road_route_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["road_route_id"], name: "index_road_route_points_on_road_route_id"
+  end
+
+  create_table "road_routes", force: :cascade do |t|
     t.bigint "track_device_id", null: false
     t.bigint "vehicle_id", null: false
     t.datetime "created_at", precision: 6, null: false
@@ -57,6 +64,7 @@ ActiveRecord::Schema.define(version: 2020_03_16_163428) do
     t.index ["vehicle_kind_id"], name: "index_vehicles_on_vehicle_kind_id"
   end
 
+  add_foreign_key "road_route_points", "road_routes"
   add_foreign_key "road_routes", "track_devices"
   add_foreign_key "road_routes", "vehicles"
   add_foreign_key "track_devices", "companies"
