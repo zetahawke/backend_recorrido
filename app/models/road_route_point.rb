@@ -20,6 +20,28 @@ class RoadRoutePoint < ApplicationRecord
       # long lat
       ['-71.04652404785156', '-34.791074253715365']
     end
+
+    def create_by_params(params)
+      prev_route(params[:devise_serial_number]).road_route_points.create(params.except(:devise_serial_number))
+    end
+
+    private
+
+    def identify_device(devise_serial_number)
+      TrackDevice.find_by(serial: devise_serial_number)
+    end
+    
+    def identify_vehicle(devise_serial_number)
+      Vehicle.joins(:track_device).find_by(track_devices: { serial: devise_serial_number })
+    end
+    
+    def prev_route(devise_serial_number)
+      device = identify_device(devise_serial_number)
+      vehicle = identify_vehicle(devise_serial_number)
+      route = RoadRoute.find_by(vehicle_id: vehicle.id, track_device_id: device.id)
+      route = RoadRoute.create(vehicle_id: vehicle.id, track_device_id: device.id) unless route || route.try(:status) != 'finished'
+      route
+    end
   end
 
   def coords
