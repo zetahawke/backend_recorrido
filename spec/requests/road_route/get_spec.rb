@@ -18,7 +18,7 @@ end
 stub_road_route_filter_params = {
   "date": Date.current.strftime('%d-%m-%Y'),
   "patent": 'AB1234',
-  "destiny": 'psn'
+  "origin": 'stg'
 }.with_indifferent_access
 
 
