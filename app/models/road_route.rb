@@ -5,9 +5,9 @@ class RoadRoute < ApplicationRecord
 
   class << self
     def filter_by(params)
-      destiny_coords = params[:destiny] == 'psn' ? RoadRoutePoint.default_init : RoadRoutePoint.default_end
+      origin_coords = params[:origin] == 'stg' ? RoadRoutePoint.default_init : RoadRoutePoint.default_end
       preload_data = params[:patent].blank? ? by_date(params[:date]) : by_date(params[:date]).by_vehicle_patent(params[:patent])
-      presentational_map(preload_data.when_road_to(destiny_coords))
+      presentational_map(preload_data.when_road_to(origin_coords))
     end
 
     def when_road_to(coords = RoadRoutePoint.default_init)

@@ -9,7 +9,7 @@ module V1
     private
 
     def filterable_params
-      params.permit(:patent, :date, :destiny)
+      params.permit(:patent, :date, :destiny, :origin)
     end
   end
 end
