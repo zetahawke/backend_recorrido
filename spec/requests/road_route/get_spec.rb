@@ -31,10 +31,6 @@ describe "filter road routes", type: :request do
     expect(JSON.parse(response.body)['road_routes']).to be_instance_of(Array)
   end
 
-  it "returns the road route point's latitude" do
-    expect(JSON.parse(response.body)['road_routes'].first['arrive'].to_datetime).to be_instance_of(DateTime)
-  end
-
   it "returns the road route point's longitude" do
     expect(JSON.parse(response.body)['road_routes'].first['patent']).to be_instance_of(String)
   end
