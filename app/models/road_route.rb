@@ -47,7 +47,7 @@ class RoadRoute < ApplicationRecord
     return if road_route_points.blank?
 
     current_last_point = road_route_points.last
-    current_last_point.created_at if current_last_point.coords == destiny_coords
+    current_last_point.created_at if GeoReferenceService.new(current_last_point.coords).is_near_of?(destiny_coords, 100)
   end
 
   def status

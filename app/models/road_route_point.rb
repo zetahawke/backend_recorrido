@@ -22,7 +22,13 @@ class RoadRoutePoint < ApplicationRecord
     end
 
     def create_by_params(params)
-      prev_route(params[:devise_serial_number]).road_route_points.create(params.except(:devise_serial_number))
+      current_route = find_a_prev_route(params[:devise_serial_number])
+      prev_point = current_route.road_route_points.last
+      if GeoReferenceService.new(prev_point.coords).is_near_of?([params[:longitude], params[:latitude]])
+        prev_point
+      else
+        current_route.road_route_points.create(params.except(:devise_serial_number))
+      end
     end
 
     private
@@ -35,7 +41,7 @@ class RoadRoutePoint < ApplicationRecord
       Vehicle.joins(:track_device).find_by(track_devices: { serial: devise_serial_number })
     end
     
-    def prev_route(devise_serial_number)
+    def find_a_prev_route(devise_serial_number)
       device = identify_device(devise_serial_number)
       vehicle = identify_vehicle(devise_serial_number)
       route = RoadRoute.find_by(vehicle_id: vehicle.id, track_device_id: device.id)
