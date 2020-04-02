@@ -53,4 +53,23 @@ class RoadRoutePoint < ApplicationRecord
   def coords
     [longitude, latitude]
   end
+
+  def next_near_point
+    road_route.road_route_points.where('road_route_points.id > ?', id).sort.first
+  end
+
+  def status
+    if time_between_points >= 120.0
+      'stop'
+    else
+      'pass'
+    end
+  end
+  
+  def time_between_points
+    current_next_near_point = next_near_point
+    return 0 unless current_next_near_point
+
+    current_next_near_point.created_at - created_at
+  end
 end
