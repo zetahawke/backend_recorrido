@@ -70,4 +70,8 @@ class RoadRoute < ApplicationRecord
 
     road_route_points.first.coords == RoadRoutePoint.default_init ? RoadRoutePoint.default_end : RoadRoutePoint.default_end    
   end
+
+  def with_points
+    serializable_hash(include: [:road_route_points])
+  end
 end
